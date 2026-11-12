@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "发送锁",
+    "description": "锁住发送：回车只断行，macOS 上按住 Cmd、其它平台按住 Ctrl 才能发出消息。"
+  }
+}

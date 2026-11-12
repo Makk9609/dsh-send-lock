@@ -1,0 +1,62 @@
+{
+  "name": "dsh-send-lock",
+  "version": "0.2.0",
+  "description": "Plain Enter only breaks lines, and the send button stays disabled until Cmd (macOS) or Ctrl is held, so a message never leaves half-written.",
+  "type": "module",
+  "license": "MIT",
+  "author": "MaiZhe'ning",
+  "icon": "./icon.svg",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Makk9609/dsh-send-lock.git"
+  },
+  "homepage": "https://github.com/Makk9609/dsh-send-lock",
+  "bugs": {
+    "url": "https://github.com/Makk9609/dsh-send-lock/issues"
+  },
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek-harness",
+    "cordis",
+    "composer",
+    "enter",
+    "send"
+  ],
+  "exports": {
+    ".": "./index.js",
+    "./client": "./client.js",
+    "./package.json": "./package.json",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg"
+  },
+  "files": [
+    "index.js",
+    "client.js",
+    "cordis.patch.yml",
+    "locale/*.json",
+    "icon.svg",
+    "README.md",
+    "README.zh.md",
+    "CHANGELOG.md",
+    "LICENSE",
+    "test"
+  ],
+  "scripts": {
+    "test": "node test/smoke.mjs"
+  },
+  "dsh": {
+    "manifestVersion": 1,
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "immediately": true,
+      "inject": [
+        "@deepseek-ai/dsh-client-ui-conversation",
+        "@deepseek-ai/dsh-client-locale"
+      ]
+    }
+  }
+}
