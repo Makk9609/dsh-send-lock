@@ -144,6 +144,7 @@ function load(platform, { dictionaryReady = true } = {}) {
 
   return {
     plugin,
+    doc: document,
     sheet: () => state.sheet,
     attributes,
     registrations,
@@ -157,6 +158,9 @@ function load(platform, { dictionaryReady = true } = {}) {
     keydown: listeners.get('keydown'),
     keyup: listeners.get('keyup'),
     click: listeners.get('click'),
+    pointermove: listeners.get('pointermove'),
+    pointerdown: listeners.get('pointerdown'),
+    visibilitychange: listeners.get('visibilitychange'),
     blur: windowListeners.get('blur'),
     localeListeners,
     dispose() {
@@ -254,6 +258,23 @@ function load(platform, { dictionaryReady = true } = {}) {
   assert.equal(app.attributes.has('data-dsh-send-mod'), false)
   app.keydown(new FakeKeyboardEvent('keydown', { key: 'Meta' }))
   app.blur()
+  assert.equal(app.attributes.has('data-dsh-send-mod'), false)
+
+  // 浏览器接管的组合键吞掉 keyup 后，后续输入把按住态校准回来。
+  app.keydown(new FakeKeyboardEvent('keydown', { key: 'Meta' }))
+  app.keydown(new FakeKeyboardEvent('keydown', { key: 's', metaKey: true, shiftKey: true }))
+  assert.equal(app.attributes.has('data-dsh-send-mod'), true)
+  app.pointermove({ metaKey: false, ctrlKey: false })
+  assert.equal(app.attributes.has('data-dsh-send-mod'), false)
+  app.keydown(new FakeKeyboardEvent('keydown', { key: 'Meta' }))
+  app.keydown(new FakeKeyboardEvent('keydown', { key: 'a', metaKey: false }))
+  assert.equal(app.attributes.has('data-dsh-send-mod'), false)
+  app.keydown(new FakeKeyboardEvent('keydown', { key: 'Meta' }))
+  app.pointerdown({ metaKey: false, ctrlKey: false })
+  assert.equal(app.attributes.has('data-dsh-send-mod'), false)
+  app.keydown(new FakeKeyboardEvent('keydown', { key: 'Meta' }))
+  app.doc.visibilityState = 'hidden'
+  app.visibilitychange()
   assert.equal(app.attributes.has('data-dsh-send-mod'), false)
 
   assert.equal(app.clickOn('发送消息').defaultPrevented, true)

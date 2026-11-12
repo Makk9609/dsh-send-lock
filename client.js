@@ -14,6 +14,7 @@ window.__ModuleLoader__.load({
 
     let labels = []
     let replaying = false
+    let modifier = false
     let render = () => {}
 
     function sendsWith(event) {
@@ -48,7 +49,10 @@ window.__ModuleLoader__.load({
       }
     }
 
+    // 浏览器接管的组合键（截图、录屏）会吞掉 keyup，按住态得靠后续输入重新校准。
     function setModifier(held) {
+      if (held === modifier) return
+      modifier = held
       const root = document.documentElement
       if (held) root.setAttribute(MOD_ATTR, '')
       else root.removeAttribute(MOD_ATTR)
@@ -59,6 +63,7 @@ window.__ModuleLoader__.load({
         if (event.key === (IS_MAC ? 'Meta' : 'Control')) setModifier(true)
         return
       }
+      setModifier(sendsWith(event))
       if (replaying || event.key !== 'Enter') return
       if (event.isComposing === true || event.keyCode === 229) return
       if (event.altKey || event.shiftKey) return
@@ -75,8 +80,15 @@ window.__ModuleLoader__.load({
     }
 
     function onKeyUp(event) {
-      if (event.key !== 'Control' && event.key !== 'Meta') return
       setModifier(sendsWith(event))
+    }
+
+    function onPointer(event) {
+      setModifier(sendsWith(event))
+    }
+
+    function onVisibility() {
+      if (document.visibilityState === 'hidden') setModifier(false)
     }
 
     function onBlur() {
@@ -136,11 +148,17 @@ window.__ModuleLoader__.load({
           document.addEventListener('keydown', onKeyDown, true)
           document.addEventListener('keyup', onKeyUp, true)
           document.addEventListener('click', onClick, true)
+          document.addEventListener('pointermove', onPointer, { capture: true, passive: true })
+          document.addEventListener('pointerdown', onPointer, { capture: true, passive: true })
+          document.addEventListener('visibilitychange', onVisibility)
           window.addEventListener('blur', onBlur)
           return () => {
             document.removeEventListener('keydown', onKeyDown, true)
             document.removeEventListener('keyup', onKeyUp, true)
             document.removeEventListener('click', onClick, true)
+            document.removeEventListener('pointermove', onPointer, true)
+            document.removeEventListener('pointerdown', onPointer, true)
+            document.removeEventListener('visibilitychange', onVisibility)
             window.removeEventListener('blur', onBlur)
             setModifier(false)
           }
