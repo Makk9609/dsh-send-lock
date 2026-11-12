@@ -1,6 +1,6 @@
 {
   "meta": {
     "title": "Send lock",
-    "description": "Enter only breaks lines; Cmd on macOS or Ctrl elsewhere sends."
+    "description": "Enter inserts a newline; Cmd (macOS) or Ctrl sends."
   }
 }

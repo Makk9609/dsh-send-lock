@@ -1,8 +1,6 @@
 # dsh-send-lock
 
-One stray Enter and a half-written sentence goes to the model: the turn is interrupted and tokens are gone.
-
-Send lock turns Enter into a line break. To send, hold Cmd (macOS) or Ctrl and press Enter — or hold it and click the send button. Without the key the button looks the way it does with an empty draft, and clicking it does nothing.
+Changes how DSH Web sends messages: Enter inserts a newline instead of submitting the draft, and sending takes Cmd on macOS or Ctrl elsewhere.
 
 [中文](README.zh.md)
 
@@ -16,16 +14,17 @@ Restart `dsh web`, or install from Plugin Manager.
 
 ## Usage
 
-- Enter: line break. Nothing happens when the draft is empty.
+- Enter: line break. An empty draft does nothing.
 - Cmd+Enter (macOS) or Ctrl+Enter: send.
-- Send button: the same disabled look as an empty draft until the key is held; clicking it without the key does nothing.
-- Shift+Enter still breaks lines, and Stop generating stays one click.
+- Send button: usable only while that modifier is held; otherwise it keeps the disabled look and a click does nothing.
+- Shift+Enter: line break, unchanged.
+- Stop generating: not gated.
 
-## Notes
+## Compatibility
 
-- The send button is recognised by the composer's own send labels (“Send message”, “Queue message”, “Steer message”). If those labels change, the button goes back to the native always-enabled state instead of getting stuck.
-- IME composition and the `/` and `@` menus keep Enter.
-- Web UI only (`dsh.client.platform` is `web`).
+- DSH Web UI only (`dsh.client.platform` is `web`).
+- The send button is identified by the label the composer provides. When it cannot be identified, the button returns to its native behavior.
+- IME composition, the `/` command menu, and the `@` reference menu keep Enter.
 
 ## License
 
