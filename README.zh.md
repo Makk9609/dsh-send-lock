@@ -1,6 +1,6 @@
 # dsh-send-lock
 
-调整 DSH Web 的消息发送方式：Enter 只换行，不提交草稿；发送用 Cmd（macOS）或 Ctrl。
+调整 DSH Web 的消息发送方式：Enter 只换行，不提交草稿；发送时须同时按下 Cmd（macOS）或 Ctrl 和 Enter 或 点击发送按钮。
 
 [English](README.md)
 
