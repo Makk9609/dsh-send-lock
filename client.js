@@ -96,7 +96,9 @@ window.__ModuleLoader__.load({
     }
 
     function onClick(event) {
-      if (sendsWith(event)) return
+      // 样式与这次点击的判定同源：先按事件里的修饰键改写样式，再用同一个值决定放行。
+      setModifier(sendsWith(event))
+      if (modifier) return
       const target = event.target
       if (target === null || typeof target.closest !== 'function') return
       const button = target.closest('button')

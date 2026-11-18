@@ -278,8 +278,11 @@ function load(platform, { dictionaryReady = true } = {}) {
   assert.equal(app.attributes.has('data-dsh-send-mod'), false)
 
   assert.equal(app.clickOn('发送消息').defaultPrevented, true)
+  assert.equal(app.attributes.has('data-dsh-send-mod'), false)
   assert.equal(app.clickOn('发送消息', { metaKey: true }).defaultPrevented, false)
+  assert.equal(app.attributes.has('data-dsh-send-mod'), true)
   assert.equal(app.clickOn('发送消息', { ctrlKey: true }).defaultPrevented, true)
+  assert.equal(app.attributes.has('data-dsh-send-mod'), false)
   assert.equal(app.clickOn('停止生成').defaultPrevented, false)
   assert.equal(app.clickOn('添加附件').defaultPrevented, false)
 

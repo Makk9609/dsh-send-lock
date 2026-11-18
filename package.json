@@ -1,6 +1,6 @@
 {
   "name": "dsh-send-lock",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Changes Enter to insert a newline in DSH Web. Use Cmd/Ctrl+Enter to send messages.",
   "type": "module",
   "license": "MIT",
