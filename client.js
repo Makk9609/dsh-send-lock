@@ -27,11 +27,9 @@ window.__ModuleLoader__.load({
       return root
     }
 
-    // 菜单打开时 Enter 属于菜单：行首 `/` 命令，或行尾未闭合的 `@` 引用。
-    function menuOpen(text) {
-      if (/^\s*\//.test(text)) return true
-      const tail = /\S+$/.exec(text)
-      return tail !== null && tail[0].startsWith('@')
+    // 菜单打开时 Enter 属于菜单。以 `/` 或 `@` 开头的草稿本身不是菜单。
+    function menuOpen() {
+      return document.querySelector('[data-trigger-menu]') !== null
     }
 
     function insertLineBreak(editor) {
@@ -72,7 +70,7 @@ window.__ModuleLoader__.load({
       if (target === null || target.isContentEditable !== true) return
       const editor = rootOf(target)
       const text = editor.textContent ?? ''
-      if (menuOpen(text)) return
+      if (menuOpen()) return
       event.preventDefault()
       event.stopPropagation()
       if (event.repeat || text.trim() === '') return

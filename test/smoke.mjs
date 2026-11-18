@@ -77,6 +77,10 @@ function load(platform, { dictionaryReady = true } = {}) {
     },
     removeEventListener(type) {
       listeners.delete(type)
+    },
+    querySelector(selector) {
+      assert.equal(selector, '[data-trigger-menu]')
+      return state.menuOpen === true ? { nodeType: 1 } : null
     }
   }
 
@@ -154,6 +158,9 @@ function load(platform, { dictionaryReady = true } = {}) {
     mount() {
       assert.equal(registrations.length, 1)
       return registrations[0].component()
+    },
+    setMenu(open) {
+      state.menuOpen = open
     },
     keydown: listeners.get('keydown'),
     keyup: listeners.get('keyup'),
@@ -244,8 +251,19 @@ function load(platform, { dictionaryReady = true } = {}) {
   assert.equal(app.press(editable('t'), { shiftKey: true }).defaultPrevented, false)
   assert.equal(app.press(editable('t'), { altKey: true }).defaultPrevented, false)
   assert.equal(app.press(editable('t'), { isComposing: true }).defaultPrevented, false)
+  // 菜单打开时，Enter 归菜单。
+  app.setMenu(true)
   assert.equal(app.press(editable('/goal 写测试')).defaultPrevented, false)
   assert.equal(app.press(editable('看一下 @src')).defaultPrevented, false)
+  app.setMenu(false)
+
+  // 以 `/` 或 `@` 开头的普通文本不是菜单，回车仍然断行。
+  const pathDraft = editable('/Users/mai/.dsh/AGENTS.md已经存在')
+  assert.equal(app.press(pathDraft).defaultPrevented, true)
+  assert.equal(pathDraft.sent.length, 1)
+  const mentionDraft = editable('看一下 @src')
+  assert.equal(app.press(mentionDraft).defaultPrevented, true)
+  assert.equal(mentionDraft.sent.length, 1)
   assert.equal(app.press(filled, { repeat: true }).defaultPrevented, true)
   assert.equal(filled.sent.length, 1)
   assert.equal(app.press({ isContentEditable: false, textContent: 't' }).defaultPrevented, false)
